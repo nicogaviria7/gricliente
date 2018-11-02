@@ -351,7 +351,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 .link:hover{
 	text-decoration: none;
-	 background-color: none;
+	background-color: none;
 }
 
 .region-hero{
@@ -385,25 +385,165 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 }
 
 button.copyButton::before {
-  font-family: fontAwesome;
-  content: "\f0c5\00a0";
+	font-family: fontAwesome;
+	content: "\f0c5\00a0";
 }
 
 button.excelButton::before {
-  font-family: fontAwesome;
-  content: "\f1c3\00a0";
+	font-family: fontAwesome;
+	content: "\f1c3\00a0";
 }
 
 button.pdfButton::before {
-  font-family: fontAwesome;
-  content: "\f1c1\00a0";
+	font-family: fontAwesome;
+	content: "\f1c1\00a0";
 }
 
 button.printButton::before {
-  font-family: fontAwesome;
-  content: "\f02f\00a0";
+	font-family: fontAwesome;
+	content: "\f02f\00a0";
 }
 
 .table{
 	cursor:pointer;
 }
+
+.cards-list{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-left: 0;
+    }
+
+.cards-item{
+	clear: both;
+	width: 25%;
+	float: left;
+	position: relative;
+	display: flex;
+	vertical-align: top;
+	font-size: 1.4rem;
+	line-height: 2rem;
+}
+
+
+
+.card{
+	margin: 8px;
+	overflow: hidden;
+	display: flex;
+	transition: all .1s ease-out;
+	box-shadow: 0 2px 4px -2px rgba(0,0,0,.075);
+	width: calc(100% - 16px);
+	border-radius: 2px;
+	position: relative;
+}
+
+
+
+.card-container, .card-container:hover{
+	background-color: rgb(255, 255, 255);
+	text-decoration: none;
+	outline-width: 0px;
+	border-radius: 2px;
+	background-clip: padding-box;
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgba(0, 0, 0, 0.075);
+	border-image: initial;
+	position: relative;
+	color: rgb(43, 43, 43);
+	
+}
+
+.card-container:hover{
+background-color: rgb(64,64,64,0.1);
+}
+
+.card-icon{
+	width: 64px;
+	height: 64px;
+	line-height: 64px;
+	margin-top: 36px;
+	color: rgb(255, 255, 255);
+	margin: 24px auto 0px;
+	border-radius: 100px;
+	display: block;
+}
+
+.card-icon-1{
+	background-color: #ee4035 ;
+}
+.card-icon-2{
+	background-color: #f37736;
+}
+
+.card-icon-3{
+	background-color: #ffa700;
+}
+
+.card-icon-4{
+	background-color: #7bc043;
+}
+
+.card-icon-5{
+	background-color: #21cea2;
+}
+
+.card-icon-6{
+	background-color: #0392cf;
+}
+.card-icon-7{
+	background-color: #212cce;
+}
+.card-icon-8{
+	background-color: #812c99;
+}
+
+
+
+.icono{
+	font-size: 32px;
+	width: 64px;
+	height: 64px;
+	line-height: 64px;
+	display: inline-block;
+	overflow: hidden;
+	text-align: center;
+	vertical-align: top;
+}
+
+.card-title-container{
+	padding-top: 12px;
+	padding-bottom: 36px;
+	display: block;
+	padding: 24px 16px;
+	box-sizing: border-box;
+}
+
+.card-title{
+	white-space: normal;
+	font-size: 1.2rem;
+	line-height: 2rem;
+	margin: 0;
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	color: #404040;
+	font-weight: 400;
+}
+
+.card-colorFill{
+	background-color: #309fdb;
+	color: #ffffff;
+	display: block; 
+}
+
+
+
