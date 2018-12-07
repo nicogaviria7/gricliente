@@ -380,7 +380,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 }
 
 .titulo-hero{
-	font-size: 2.5rem;
+	text-align: center;
+	font-size: 2rem;
 	line-height: 3rem;
 	margin: 0;
 	color: #393939;
@@ -441,6 +442,7 @@ button.printButton::before {
 	vertical-align: top;
 	font-size: 1.4rem;
 	line-height: 2rem;
+	
 }
 
 
@@ -459,12 +461,13 @@ button.printButton::before {
 
 
 .card-container, .card-container:hover{
-	background-color: rgb(255, 255, 255);
+	background-color: #ffffff;
 	text-decoration: none;
 	outline-width: 0px;
 	border-radius: 2px;
 	background-clip: padding-box;
 	width: 100%;
+	height: 100%;
 	border-width: 1px;
 	border-style: solid;
 	border-color: rgba(0, 0, 0, 0.075);
@@ -475,7 +478,59 @@ button.printButton::before {
 }
 
 .card-container:hover{
-	background-color: rgb(64,64,64,0.1);
+	background-color: rgb(64,64,64,0.05);
+}
+
+.card-1{
+	background-color: #FFCC00;
+	border:none;
+}
+
+.card-2{
+	background-color: #DC911B;
+	border:none;
+}
+
+.card-3{
+	background-color: #1169B0;
+	border:none;
+}
+
+.card-4{
+	background-color: #009DE0;
+	border:none;
+}
+
+.card-5{
+	background-color: #C20B19;
+	border:none;
+}
+
+
+.card-6{
+	background-color: #8FB435;
+	border:none;
+}
+
+.card-7{
+	background-color: #8E1C7D;
+	border:none;
+}
+
+.card-8{
+	background-color: #009640;
+	border:none;
+}
+
+.lista-miembros{
+	border-bottom: 1px solid rgba(0,0,0,0.50);
+}
+
+.card-bar{
+      display: block;
+      height: 12px;
+      position: relative;
+ 
 }
 
 .card-icon{
@@ -545,9 +600,32 @@ button.printButton::before {
 	box-sizing: border-box;
 }
 
+.card-title-container-s{
+	padding-top: 12px;
+	padding-bottom: 36px;
+	display: block;
+	padding: 12px 4px;
+	box-sizing: border-box;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%); 
+}
+
 .card-title{
 	white-space: normal;
 	font-size: 1.2rem;
+	line-height: 2rem;
+	margin: 0;
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	color: #404040;
+	font-weight: 400;
+}
+
+.card-title-s{
+	white-space: normal;
+	font-size: 1rem;
 	line-height: 2rem;
 	margin: 0;
 	overflow: hidden;
@@ -561,4 +639,40 @@ button.printButton::before {
 	background-color: #309fdb;
 	color: #ffffff;
 	display: block; 
+}
+
+.contenedor{
+	position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.contenedor-header{
+	padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.contenedor-header: first-child{
+	    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
+
+.contenedor-body{
+	flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+label{
+	font-weight: 600;
+}
+
+.sub-row{
+	margin-left:0;
 }
