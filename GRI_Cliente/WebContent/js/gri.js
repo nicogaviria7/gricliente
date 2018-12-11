@@ -159,7 +159,8 @@ if(document.getElementById('titulo')){
       });
       }
     }else if(type=='c'){
-      document.getElementById('side-centros').classList.add('active');
+    	document.getElementById('side-grupos').classList.remove('active');
+      document.getElementById('side-centros').classList.add('active');   
       var uri = "/GRI_Server/rest/service/centro/"+id;
       $.ajax({
                type: "GET",
@@ -171,6 +172,19 @@ if(document.getElementById('titulo')){
                  document.getElementById('titulo').innerHTML = data.nombre;
                }
            });
+      
+      if(document.getElementById('miembros')){
+          $.ajax({
+              type: "GET",
+              contentType:"application/json",
+              url: "/GRI_Server/rest/service/centros/"+id,
+              dataType: 'json',
+              cache: false,
+              success: function (data) {
+                llenarLista(data, 'c');
+              }
+          });
+          }
     }else if(type=='u'){
     	document.getElementById('side-grupos').classList.add('active');
     	 document.getElementById('titulo').innerHTML = "TIPOLOGÍA DE PRODUCTOS PARA LA UNIVERSIDAD DEL QUINDÍO";
@@ -329,7 +343,7 @@ if(document.getElementById('titulo')){
 
   $('#tabla_centros tbody').on('click', 'tr', function () {
     var data = tabla_centros.row( this ).data();
-    window.location.href="home_grupos.html"+"?id="+data.id+"&type=c";
+    window.location.href="general.html"+"?id="+data.id+"&type=c";
   });
   
 
@@ -392,6 +406,7 @@ if(document.getElementById('tabla_integrantes')){
 		  id = getParameterByName('id');
 	  }
   
+	  console.log(type);
 	  var url = "/GRI_Server/rest/service/integrantes/"+type+"/"+id;
 	  
 	  $.ajax({
@@ -547,7 +562,21 @@ function llenarLista(data, tipo){
 					))); 
 	}
 	 
+} else if (tipo == 'c'){		
+	console.log(data);
+	for(i=0; i<data.length; i++){			
+		 $('#miembros').append(
+				    $('<li>').addClass('cards-item ci-'+ calcularEspacio(data.length)).append(
+				    	$('<div>').addClass('card card-').append(
+				    		$('<a>').addClass('card-container').attr('href',location.origin + location.pathname + '?id='+data[i].id+'&type=g').append(
+				    		$('<div>').addClass('card-title-container-s').append(
+				            $('<h3>').addClass('card-title-s').append(data[i].nombre)
+				))).append(
+			            $('<div>').addClass('card-bar card-'+(data[i].centro.facultad.id))
+				))); 
 }
+
+} 
 }
 
 function calcularEspacio(tamanio){
