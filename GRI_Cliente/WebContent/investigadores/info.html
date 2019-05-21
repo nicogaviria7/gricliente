@@ -22,7 +22,7 @@
 
 <title>Reporte</title>
 </head>
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled">
 
 	<nav class="navbar navbar-expand navbar-dark static-top"
 		style="background-color: #007f36;">
@@ -50,15 +50,14 @@
 					aria-labelledby="userDropdown">
 					<a class="dropdown-item" href="#">Configuración</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#" data-toggle="modal"
-						data-target="#logoutModal">Cerrar Sesión</a>
+					<a class="dropdown-item" href="#" id="logout" data-toggle="modal" data-target="#logoutModal">Cerrar Sesión</a>
 				</div></li>
 		</ul>
 	</nav>
 
 	<div id="wrapper">
 		<!-- Sidebar -->
-		<ul class="sidebar navbar-nav">
+		<ul id="sidebar" class="sidebar navbar-nav toggled">
 			<li id="side-inicio" class="nav-item"><a class="nav-link"
 				href="../index.html"> <i class="fas fa-fw fa-home"></i> <span>Inicio</span>
 			</a></li>

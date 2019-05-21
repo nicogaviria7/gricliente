@@ -1,8 +1,21 @@
 (function($) {
   "use strict"; // Start of use strict
 
-  $(document).ready( function () {
+ window.onload = function() {
+	 var data = sessionStorage.getItem('sessionId');
+//	 if(!data){
+//		 if (window.location.pathname!="/GRI_Cliente/login.html"){
+//			 window.location.href = "login.html";
+//		 }
+//	 }else{
+		 if (window.location.pathname=="/GRI_Cliente/login.html"){
+			 window.location.href = "index.html";
+		 }
+	 }
 
+  
+  $(document).ready( function () {
+	  
   // Toggle the side navigation
   $("#sidebarToggle").on('click',function(e) {
     e.preventDefault();
@@ -28,7 +41,92 @@
     }, 1000, 'easeInOutExpo');
     event.preventDefault();
   });
-
+  
+  $.fn.DataTable.ext.type.search['string'] = function ( data ) {
+      return ! data ?
+          '' :
+          typeof data === 'string' ?
+              data
+                  .replace( /έ/g, 'ε')
+                  .replace( /ύ/g, 'υ')
+                  .replace( /ό/g, 'ο')
+                  .replace( /ώ/g, 'ω')
+                  .replace( /ά/g, 'α')
+                  .replace( /ί/g, 'ι')
+                  .replace( /ή/g, 'η')
+                  .replace( /\n/g, ' ' )
+                  .replace( /[áÁ]/g, 'a' )
+                  .replace( /[éÉ]/g, 'e' )
+                  .replace( /[íÍ]/g, 'i' )
+                  .replace( /[óÓ]/g, 'o' )
+                  .replace( /[úÚ]/g, 'u' )
+                  .replace( /ê/g, 'e' )
+                  .replace( /î/g, 'i' )
+                  .replace( /ô/g, 'o' )
+                  .replace( /è/g, 'e' )
+                  .replace( /ï/g, 'i' )
+                  .replace( /ü/g, 'u' )
+                  .replace( /ã/g, 'a' )
+                  .replace( /õ/g, 'o' )
+                  .replace( /ç/g, 'c' )
+                  .replace( /ì/g, 'i' ) :
+              data;
+  };
+  
+  $("#login").on('click',function(){
+	  var username = document.getElementById('userInput').value;
+	  var password = document.getElementById('passwordInput').value;
+	  
+	  var user = {
+			 "username": username,
+			 "password": password
+	  }
+	  var data = JSON.stringify(user);
+  
+	  $.ajax({
+		  type: "POST",
+		  contentType:"application/json",
+		  url: '/GRI_Server/rest/service/user/',
+		  data: data,
+		  dataType: 'json',
+          cache: false,
+		  success: function(res){
+		    if(res){
+		    	sessionStorage.setItem('sessionId', '5b7b086db1c3e1064f82b6251619c4eb');
+		    	window.location.href = "index.html";
+		    	return false;
+		    }else{
+		    	document.getElementById('error-message').style.display = "inline-block";
+		    	document.getElementById('error-message').innerHTML = 'Error: Datos Incorrectos';
+		    }
+		  }
+		});
+		});
+  
+  $("#logout").on('click',function(){
+	  sessionStorage.removeItem('sessionId');
+	  location.reload();
+	  return false;
+  });
+  
+  $("#input-busqueda").keyup(function(event) {
+	    if (event.keyCode === 13) {
+	        $("#btn-buscar").click();
+	    }
+	});
+  
+  $("#btn-buscar").on('click',function(){
+	  var cadena = document.getElementById('input-busqueda').value;
+	  var path = cadena.replace(/\s/g, '+');
+	  if(document.getElementById("gruplac").checked){
+		  window.location.href = "busqueda.html?type=g&search="+path; 
+	  } else{
+		  window.location.href = "busqueda.html?type=i&search="+path; 
+		  
+	  }	  
+	  return false;
+  });
+  
 if(document.getElementById('badge')) {
  $.ajax({
                type: "GET",
@@ -43,6 +141,48 @@ if(document.getElementById('badge')) {
                }
            });
 }
+
+if(document.getElementById('table-prod')) {
+	
+	   var type = getParameterByName('type');
+	   var cadena = getParameterByName('search');
+	   
+	   var res = cadena.split("+").join(" ");
+	   document.getElementById("input-busqueda").value = res;
+	   
+	   cadena = cadena.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+ 
+	   if(type == "i"){
+		   document.getElementById("gruplac").checked = false;
+			  document.getElementById("cvlac").checked = true;
+	   }
+	
+	$.ajax({
+        type: "GET",
+        contentType:"application/json",
+        url: "/GRI_Server/rest/service/busqueda/"+type+"/"+cadena,
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+        	 var tprod = $('#table-prod').DataTable( {
+      		    data: data
+      		    } );
+        	 
+        	 $("#table-prod").mark(" "+ cadena+ " ");
+        	 
+        	 
+        	 $('#table-prod_filter input').keyup( function () {  
+       		  tprod
+       	      .search(
+       	        jQuery.fn.DataTable.ext.type.search.string( this.value )
+       	      )
+       	      .draw(); 
+       	  } );
+        	 
+        }
+    });
+  }
+
 
 if(document.getElementById('titulo')){
    var id = getParameterByName('id');
@@ -59,11 +199,14 @@ if(document.getElementById('titulo')){
                cache: false,
                success: function (data) {
                  document.getElementById('titulo').innerHTML = data.nombre;
+                 document.getElementById('sidebar').classList.add('card-0');
                  if(document.getElementById('info-personal')){
                 	 document.getElementById('name').innerHTML = data.nombre;
                 	 document.getElementById('categoria').innerHTML = data.categoria;
                 	 document.getElementById('nivelAcademico').innerHTML = data.nivelAcademico;
                 	 document.getElementById('pertenencia').innerHTML = data.pertenencia;
+                	 
+                	 
                 	 
                 	 var grupos = data.grupos;
                 	 
@@ -76,7 +219,6 @@ if(document.getElementById('titulo')){
             	}
                 	 
                 	 var idiomas = data.idiomas;
-                	 console.log(idiomas);
                 	 $('#tabla_idiomas').DataTable( {
                 		    data: idiomas,
                 		      columns: [
@@ -94,7 +236,7 @@ if(document.getElementById('titulo')){
 
     }else if(type=='g'){
       document.getElementById('side-grupos').classList.add('active');
-       var uri = "/GRI_Server/rest/service/grupo/"+id;
+       var uri = "/GRI_Server/rest/service/grupos/"+id;
       $.ajax({
                type: "GET",
                contentType:"application/json",
@@ -103,13 +245,14 @@ if(document.getElementById('titulo')){
                cache: false,
                success: function (data) {
                  document.getElementById('titulo').innerHTML = data.nombre;
-                 
+                 document.getElementById('navigation-bar').classList.add('card-'+data.programas[0].facultad.id);
+                 document.getElementById('sidebar').classList.add('card-'+data.programas[0].facultad.id);
                }
            });
 
     }else if(type=='f'){
       document.getElementById('side-grupos').classList.add('active');
-      var uri = "/GRI_Server/rest/service/facultad/"+id;
+      var uri = "/GRI_Server/rest/service/facultades/"+id;
       $.ajax({
                type: "GET",
                contentType:"application/json",
@@ -118,13 +261,15 @@ if(document.getElementById('titulo')){
                cache: false,
                success: function (data) {
                  document.getElementById('titulo').innerHTML = data.nombre;
+                 document.getElementById('navigation-bar').classList.add('card-'+data.id);
+                 document.getElementById('sidebar').classList.add('card-'+data.id);
                }
            });
       if(document.getElementById('miembros')){
       $.ajax({
           type: "GET",
           contentType:"application/json",
-          url: "/GRI_Server/rest/service/programas/"+id,
+          url: "/GRI_Server/rest/service/programasfacultad/"+id,
           dataType: 'json',
           cache: false,
           success: function (data) {
@@ -135,7 +280,7 @@ if(document.getElementById('titulo')){
       
     }else if(type=='p'){
       document.getElementById('side-grupos').classList.add('active');
-      var uri = "/GRI_Server/rest/service/programa/"+id;
+      var uri = "/GRI_Server/rest/service/programas/"+id;
       $.ajax({
                type: "GET",
                contentType:"application/json",
@@ -144,13 +289,15 @@ if(document.getElementById('titulo')){
                cache: false,
                success: function (data) {
             	 document.getElementById('titulo').innerHTML = data.nombre;
+            	 document.getElementById('navigation-bar').classList.add('card-'+data.facultad.id);
+            	 document.getElementById('sidebar').classList.add('card-'+data.facultad.id);
                }
            });
       if(document.getElementById('miembros')){
       $.ajax({
           type: "GET",
           contentType:"application/json",
-          url: "/GRI_Server/rest/service/grupos/"+id,
+          url: "/GRI_Server/rest/service/gruposprograma/"+id,
           dataType: 'json',
           cache: false,
           success: function (data) {
@@ -161,7 +308,7 @@ if(document.getElementById('titulo')){
     }else if(type=='c'){
     	document.getElementById('side-grupos').classList.remove('active');
       document.getElementById('side-centros').classList.add('active');   
-      var uri = "/GRI_Server/rest/service/centro/"+id;
+      var uri = "/GRI_Server/rest/service/centros/"+id;
       $.ajax({
                type: "GET",
                contentType:"application/json",
@@ -170,6 +317,8 @@ if(document.getElementById('titulo')){
                cache: false,
                success: function (data) {
                  document.getElementById('titulo').innerHTML = data.nombre;
+                 document.getElementById('navigation-bar').classList.add('card-'+data.facultad.id);
+                 document.getElementById('sidebar').classList.add('card-'+data.facultad.id);
                }
            });
       
@@ -177,7 +326,7 @@ if(document.getElementById('titulo')){
           $.ajax({
               type: "GET",
               contentType:"application/json",
-              url: "/GRI_Server/rest/service/centros/"+id,
+              url: "/GRI_Server/rest/service/gruposcentro/"+id,
               dataType: 'json',
               cache: false,
               success: function (data) {
@@ -195,6 +344,8 @@ if(document.getElementById('titulo')){
              dataType: 'json',
              cache: false,
              success: function (data) {
+         		document.getElementById('navigation-bar').classList.add('card-0');
+         		document.getElementById('sidebar').classList.add('card-0');
             	 llenarLista(data, 'f');
             	
              }
@@ -203,7 +354,8 @@ if(document.getElementById('titulo')){
 }
 
 
-  if(document.getElementById('table')) {
+if(document.getElementById('table')) {
+	var titulo;
     $.extend( $.fn.dataTable.defaults, {
       responsive: true,
       dom: 'Bfrtip',
@@ -216,12 +368,79 @@ if(document.getElementById('titulo')){
       {
         extend: 'excel',
         text: 'Excel',
-        className: 'excelButton'
+        className: 'excelButton',
+        customize: function ( xlsx ) {
+        	  var sheet = xlsx.xl.worksheets['sheet1.xml'];
+        	  if(document.getElementById('tabla_integrantes')){
+        		  $('c[r=A1] t', sheet).text( 'INTEGRANTES - '+document.getElementById('titulo').textContent );
+        	  }
+        	  else if(document.getElementById('tabla_reporte')){
+        		  $('c[r=A1] t', sheet).text(document.getElementById('titulo').textContent + ' - '+document.getElementById('subtitulo').textContent );
+        		  var table = document.getElementById('tabla_reporte');
+        		 
+        	  }
+        	  else if(document.getElementById('tabla_centros')){
+        		  $('c[r=A1] t', sheet).text('Centros de Investigación'); 
+        	  }
+        	  else if(document.getElementById('tabla_investigadores_wrapper')){
+        		  $('c[r=A1] t', sheet).text('Investigadores'); 
+        	  }
+          },
+      filename: function() {
+    	  if(document.getElementById('tabla_integrantes')){
+    		  return 'INTEGRANTES - '+document.getElementById('titulo').textContent ;
+    	  }
+    	  else if(document.getElementById('tabla_reporte')){
+    		  return document.getElementById('titulo').textContent + ' - '+document.getElementById('subtitulo').textContent ;
+    	  }
+    	  else if(document.getElementById('tabla_centros')){
+    		  return 'Centros de Investigación'; 
+    	  }
+    	  else if(document.getElementById('tabla_investigadores_wrapper')){
+    		  return 'Investigadores'; 
+    	  }      
+        },
+        exportOptions: {
+            columns: ':visible'
+        },
+        messageTop: 'PRUEBA'
+        
       },
       {
         extend: 'pdf',
         text: 'PDF',
-        className: 'pdfButton'
+        className: 'pdfButton',
+        filename: function() {
+      	  if(document.getElementById('tabla_integrantes')){
+      		  return 'INTEGRANTES - '+document.getElementById('titulo').textContent ;
+      	  }
+      	  else if(document.getElementById('tabla_reporte')){
+      		  return document.getElementById('titulo').textContent + ' - '+document.getElementById('subtitulo').textContent ;
+      	  }
+      	  else if(document.getElementById('tabla_centros')){
+      		  return 'Centros de Investigación'; 
+      	  }
+      	  else if(document.getElementById('tabla_investigadores_wrapper')){
+      		  return 'Investigadores'; 
+      	  }      
+          },
+          title : function() {
+        	  if(document.getElementById('tabla_integrantes')){
+        		  return 'INTEGRANTES - '+document.getElementById('titulo').textContent ;
+        	  }
+        	  else if(document.getElementById('tabla_reporte')){
+        		  return document.getElementById('titulo').textContent + ' - '+document.getElementById('subtitulo').textContent ;
+        	  }
+        	  else if(document.getElementById('tabla_centros')){
+        		  return 'Centros de Investigación'; 
+        	  }
+        	  else if(document.getElementById('tabla_investigadores_wrapper')){
+        		  return 'Investigadores'; 
+        	  }      
+            },
+            exportOptions: {
+                columns: ':visible'
+            }
       },
       {
         extend: 'print',
@@ -263,6 +482,14 @@ if(document.getElementById('titulo')){
       { data: "categoria" } ,
       { data: "nivelAcademico" }
       ]
+    } );
+  
+  $('#tabla_investigadores_filter input').keyup( function () {  
+	  tabla_investigadores
+        .search(
+          jQuery.fn.DataTable.ext.type.search.string( this.value )
+        )
+        .draw(); 
     } );
 
   var tabla_grupos= $('#tabla_grupos').DataTable( {
@@ -320,6 +547,14 @@ if(document.getElementById('titulo')){
       { data: "facultad.nombre" }
       ]
     } );
+  
+  $('#tabla_centros_filter input').keyup( function () {  
+	  tabla_centros
+        .search(
+          jQuery.fn.DataTable.ext.type.search.string( this.value )
+        )
+        .draw(); 
+    } ); 
 
   $('#tabla_investigadores tbody').on('click', 'tr', function () {
     var data = tabla_investigadores.row( this ).data();
@@ -406,7 +641,6 @@ if(document.getElementById('tabla_integrantes')){
 		  id = getParameterByName('id');
 	  }
   
-	  console.log(type);
 	  var url = "/GRI_Server/rest/service/integrantes/"+type+"/"+id;
 	  
 	  $.ajax({
@@ -430,6 +664,8 @@ if(document.getElementById('tabla_integrantes')){
 	        	
 	        	 
 	        	 var res = getData(json, 'categoria')
+	        	 var tituloTemp = document.getElementById("titulo").textContent;
+	        	 var tituloCategoria = 'Investigadores por Categoría COLCIENCIAS - '+tituloTemp;
 	        	 Highcharts.chart('pie-categorias', {
 	        		    chart: {
 	        		        plotBackgroundColor: null,
@@ -438,7 +674,7 @@ if(document.getElementById('tabla_integrantes')){
 	        		        type: 'pie'
 	        		    },
 	        		    title: {
-	        		        text: ''
+	        		    	text: tituloCategoria
 	        		    },
 	        		    tooltip: {
 	        		        pointFormat: '{series.name}: <b>{point.y:.0f}</b>'
@@ -463,8 +699,9 @@ if(document.getElementById('tabla_integrantes')){
 	        	        }]
 	        		});
 	                  
-	        	 
+	        	 var tituloFormacion = 'Investigadores por su Formación Académica - '+tituloTemp;
 	        	 var res2 = getData(json, 'nivelAcademico')
+	        	 console.log(res2);
 	        	 Highcharts.chart('pie-formacion', {
 	        		    chart: {
 	        		        plotBackgroundColor: null,
@@ -473,7 +710,7 @@ if(document.getElementById('tabla_integrantes')){
 	        		        type: 'pie'
 	        		    },
 	        		    title: {
-	        		        text: ''
+	        		    	text: tituloFormacion
 	        		    },
 	        		    tooltip: {
 	        		        pointFormat: '{series.name}: <b>{point.y:.0f}</b>'
@@ -532,13 +769,13 @@ function llenarLista(data, tipo){
 					    		$('<div>').addClass('card-title-container-s').append(
 					            $('<h3>').addClass('card-title-s').append(data[i].nombre)		
 					))).append(
-				            $('<div>').addClass('card-bar card-'+(i+1))
+				            $('<div>').addClass('card-bar card-'+data[i].id)
 		            ))); 
 			 
 			
 		 }
 	}else if(tipo == 'p'){
-		for(i=0; i<data.length; i++){
+		for(i=0; i<data.length; i++){			
 			 $('#miembros').append(
 					    $('<li>').addClass('cards-item ci-'+ calcularEspacio(data.length)).append(
 					    	$('<div>').addClass('card ').append(
@@ -593,7 +830,8 @@ function calcularEspacio(tamanio){
 function mostrarTabla(data, json){
 	if(data.tipoProduccion.id==3){
 		 $("#tabla_reporte>thead>tr").append("<th>ISSN/ISBN</th>");
-		 $('#tabla_reporte').DataTable( {
+		 var table= $('#tabla_reporte').DataTable( {
+			 	search: {"bSmart": false},
 			    data: json,
 			      rowId: 'id',
 			      columns: [
@@ -605,7 +843,7 @@ function mostrarTabla(data, json){
 			      ]
 			    } );
 	 }else{
-		 $('#tabla_reporte').DataTable( {
+		 var table= $('#tabla_reporte').DataTable( {
 			    data: json,
 			      rowId: 'id',
 			      columns: [
@@ -616,21 +854,82 @@ function mostrarTabla(data, json){
 			      ]
 			    } );
 	 }
+	
+	$('#tabla_reporte_filter input').keyup( function () {  
+		  table
+	      .search(
+	        jQuery.fn.DataTable.ext.type.search.string( this.value )
+	      )
+	      .draw(); 
+	  } );
 }
 
 function mostrarGraficoBarras(data, json){
 	var nombre = data.nombre;
 	var datos = getData(json, 'anio');
-	
 	var labels = datos.labels;
 	var data = datos.data;
-	
-	Highcharts.chart('barras-anio', {
+	var colors = ['#007f36','#FFCC00','#DC911B','#1169B0','#009DE0','#C20B19','#8FB435','#8E1C7D'];
+	var tipo = getParameterByName('type');
+	var id = getParameterByName('id');
+	var index;
+	var titulo1 = document.getElementById("subtitulo").textContent;
+	var titulo2 = document.getElementById("titulo").textContent;
+	var titulo = titulo1 + " - " + titulo2;
+	if(tipo=='u'){
+		index=0;
+	}
+	else if(tipo=='f'){
+		index=getParameterByName('id');
+	}
+	else if(tipo=='p'){
+		var uri = "/GRI_Server/rest/service/programas/"+id;
+		 $.ajax({
+			 'async': false,
+             type: "GET",
+             contentType:"application/json",
+             url: uri,
+             dataType: 'json',
+             cache: false,
+             success: function (data) { 
+            	index =data.facultad.id;
+             } 
+         });
+	}
+	else if(tipo=='g'){
+		var uri = "/GRI_Server/rest/service/grupos/"+id;
+		 $.ajax({
+			 'async': false,
+             type: "GET",
+             contentType:"application/json",
+             url: uri,
+             dataType: 'json',
+             cache: false,
+             success: function (data) { 
+            	index =data.programas[0].facultad.id; 
+             } 
+         });
+	}
+	else if(tipo=='c'){
+		var uri = "/GRI_Server/rest/service/centros/"+id;
+		 $.ajax({
+			 'async': false,
+             type: "GET",
+             contentType:"application/json",
+             url: uri,
+             dataType: 'json',
+             cache: false,
+             success: function (data) { 
+            	index =data.facultad.id;
+             } 
+         });
+	}
+	 Highcharts.chart('barras-anio',{
 	    chart: {
 	        type: 'column'
 	    },
 	    title: {
-	        text: ''
+	        text: titulo
 	    },
 	    xAxis: {
 	        type: 'category',
@@ -640,12 +939,15 @@ function mostrarGraficoBarras(data, json){
 	                fontSize: '13px',
 	                fontFamily: 'Helvetica Neue, sans-serif'
 	            }
-	        }
+	        },
+	    title: {
+            text: 'Año'
+        }
 	    },
-	    yAxis: {
+	    yAxis: { 
 	        min: 0,
 	        title: {
-	            text: 'Producciones Científicas'
+	            text: 'Cantidad'
 	        }
 	    },
 	    legend: {
@@ -654,9 +956,9 @@ function mostrarGraficoBarras(data, json){
 	    tooltip: {
 	        pointFormat: 'Producciones científicas: <b>{point.y:.0f}</b>'
 	    },
-	    series: [{
-	        name: 'Producciones científicas',
-	        data: datos
+	    series: [{ 
+	        data: datos, 
+	        color: colors[index]
 	    }]
 	});
 }
@@ -699,5 +1001,7 @@ function getData(json, key){
     
     return res;
 }
+
+
 
 })(jQuery); // End of use strict

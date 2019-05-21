@@ -41,30 +41,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 	}
 }
 
-.scroll-to-top {
-	position: fixed;
-	right: 15px;
-	bottom: 15px;
-	display: none;
-	width: 50px;
-	height: 50px;
-	text-align: center;
-	color: #fff;
-	background: rgba(52, 58, 64, 0.5);
-	line-height: 46px;
-}
-
-.scroll-to-top:focus, .scroll-to-top:hover {
-	color: white;
-}
-
-.scroll-to-top:hover {
-	background: #343a40;
-}
-
-.scroll-to-top i {
-	font-weight: 800;
-}
 
 .smaller {
 	font-size: 0.7rem;
@@ -117,7 +93,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 	position: absolute;
 	margin-left: 0.75rem;
 	top: 0.3rem;
-	font-weight: 400;
 	font-size: 0.5rem;
 }
 
@@ -129,7 +104,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 .sidebar {
 	width: 90px !important;
-	background-color: #009640;
+	opacity:0.97;
 	min-height: calc(100vh - 56px);
 }
 
@@ -166,7 +141,53 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 }
 
 .sidebar .nav-item .nav-link {
-	color: rgba(255, 255, 255, 0.70);
+	color: rgba(255, 255, 255, 0.80);
+	text-shadow:
+	-1px -1px 0 #000,
+     0   -1px 0 #000,
+     1px -1px 0 #000,
+     1px  0   0 #000,
+     1px  1px 0 #000,
+     0    1px 0 #000,
+    -1px  1px 0 #000,
+    -1px  0   0 #000;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.8);
+    text-shadow:
+	-1px -1px 0 #000,
+     0   -1px 0 #000,
+     1px -1px 0 #000,
+     1px  0   0 #000,
+     1px  1px 0 #000,
+     0    1px 0 #000,
+    -1px  1px 0 #000,
+    -1px  0   0 #000;
+}
+
+.text-white {
+    text-shadow:
+	-1px -1px 0 #000,
+     0   -1px 0 #000,
+     1px -1px 0 #000,
+     1px  0   0 #000,
+     1px  1px 0 #000,
+     0    1px 0 #000,
+    -1px  1px 0 #000,
+    -1px  0   0 #000;
+}
+
+.navbar-brand{
+	text-shadow:
+	-1px -1px 0 #000,
+     0   -1px 0 #000,
+     1px -1px 0 #000,
+     1px  0   0 #000,
+     1px  1px 0 #000,
+     0    1px 0 #000,
+    -1px  1px 0 #000,
+    -1px  0   0 #000;
 }
 
 .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {
@@ -203,7 +224,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 	}
 	.sidebar.toggled {
 		overflow: visible;
-		width: 90px !important;
+		width: 100px !important;
 	}
 	.sidebar.toggled .nav-item:last-child {
 		margin-bottom: 1rem;
@@ -389,23 +410,27 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 }
 
 button.copyButton::before {
-	font-family: fontAwesome;
-	content: "\f0c5\00a0";
+    font-family: 'Font Awesome\ 5 Free';
+    content: "\f0c5\00a0";
+    font-weight: 900;
 }
 
 button.excelButton::before {
-	font-family: fontAwesome;
-	content: "\f1c3\00a0";
+    font-family: 'Font Awesome\ 5 Free';
+    content: "\f1c3\00a0";
+    font-weight: 900;
 }
 
 button.pdfButton::before {
-	font-family: fontAwesome;
-	content: "\f1c1\00a0";
+    font-family: 'Font Awesome\ 5 Free';
+    content: "\f1c1\00a0";
+    font-weight: 900;
 }
 
 button.printButton::before {
-	font-family: fontAwesome;
-	content: "\f02f\00a0";
+    font-family: 'Font Awesome\ 5 Free';
+    content: "\f02f\00a0";
+    font-weight: 900;
 }
 
 .table{
@@ -479,6 +504,11 @@ button.printButton::before {
 
 .card-container:hover{
 	background-color: rgb(64,64,64,0.05);
+}
+
+.card-0{
+	background-color: #007f36;
+	border:none;
 }
 
 .card-1{

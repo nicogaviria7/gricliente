@@ -22,10 +22,9 @@
 
 <title>Reporte</title>
 </head>
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled">
 
-	<nav class="navbar navbar-expand navbar-dark static-top"
-		style="background-color: #007f36;">
+	<nav  id="navigation-bar" class="navbar navbar-expand navbar-dark static-top">
 
 		<a class="navbar-brand mr-1" href="../index.html">GRI</a>
 
@@ -50,15 +49,14 @@
 					aria-labelledby="userDropdown">
 					<a class="dropdown-item" href="#">Configuración</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#" data-toggle="modal"
-						data-target="#logoutModal">Cerrar Sesión</a>
+					<a class="dropdown-item" href="#" id="logout" data-toggle="modal" data-target="#logoutModal">Cerrar Sesión</a>
 				</div></li>
 		</ul>
 	</nav>
 
 	<div id="wrapper">
 		<!-- Sidebar -->
-		<ul class="sidebar navbar-nav">
+		<ul id="sidebar" class="sidebar navbar-nav toggled">
 			<li id="side-inicio" class="nav-item"><a class="nav-link"
 				href="../index.html"> <i class="fas fa-fw fa-home"></i> <span>Inicio</span>
 			</a></li>
@@ -86,6 +84,28 @@
 				</div>
 
 				<div class="separador-1"></div>
+				
+				<div class="row mb-3">
+					<div class="col-lg-6">
+						<div class="contenedor mb-3">
+							<div class="contenedor-header">
+								<i class="fas fa-chart-pie"></i> Investigadores por Categoría COLCIENCIAS
+							</div>
+							<div id="pie-categorias" class="contenedor-body" style="width:200; height:150">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="contenedor mb-3">
+							<div class="contenedor-header">
+								<i class="fas fa-chart-pie"></i> Investigadores por su Formación Académica
+							</div>
+							<div id="pie-formacion" class="contenedor-body" style="width:200; height:150">
+							
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="contenedor mb-3">
 					<div class="contenedor-header">
@@ -111,27 +131,7 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="contenedor mb-3">
-							<div class="contenedor-header">
-								<i class="fas fa-chart-pie"></i> Investigadores por Categoría COLCIENCIAS
-							</div>
-							<div id="pie-categorias" class="contenedor-body" style="width:200; height:150">
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="contenedor mb-3">
-							<div class="contenedor-header">
-								<i class="fas fa-chart-pie"></i> Investigadores por su Formación Académica
-							</div>
-							<div id="pie-formacion" class="contenedor-body" style="width:200; height:150">
-							
-							</div>
-						</div>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 	</div>
